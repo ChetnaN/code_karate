@@ -1,0 +1,12 @@
+code_karate.page_json:
+  path: '/page_json/{siteapikey}/{nid}' # siteapikey and nid are parameters which will be dynamic
+  methods:  [GET] # here we can define the method to be used
+  defaults:
+    _controller: '\Drupal\code_karate\Controller\CodeKarateController::get'
+    _title: 'Node JSON'
+  requirements:
+    _permission: 'access content'
+  options:
+   parameters:
+     nid:
+       type: Integer # This is used to force the value to be treated as integer

@@ -1,0 +1,30 @@
+<?php
+    
+use Drupal\Core\Form\FormStateInterface;
+//use Drupal\Core\Entity\EntityInterface;
+ /* Implements hook_form_FORM_ID_alter() for the FORM_ID() form.
+ */
+function code_karate_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+	$data = \Drupal::state()->get('siteapikey') ?: ''; // Getting value of system state variable and if not set, setting it to NULL
+
+	if($form_id == "system_site_information_settings") {
+		$form['site_api_key'] = array(
+		  '#type' => 'textfield', 
+		  '#title' => t('Site API Key'), 
+		  '#default_value' => isset($data) ? $data : t('No API Key yet'), // Setting value of siteapikey as default value for this field, and if it is not set than showing a default value
+		  '#size' => 60, 
+		  '#maxlength' => 128, 
+		  '#required' => TRUE,
+		);
+		$form['actions']['submit']['#value'] = t('Update Configuration');
+		$form['actions']['submit']['#submit'][] = 'code_karate_form_submit'; // Custom submit handler
+	}
+}
+
+function code_karate_form_submit($form, FormStateInterface $form_state) {
+	if ($form_state->hasValue('site_api_key')) {
+		$siteapikey = $form_state->getValue('site_api_key'); 
+		\Drupal::state()->set('siteapikey', $siteapikey); // Setting value of system state variable to submitted value for Site API Key field
+		drupal_set_message('Site API Key has been saved with value ' . $siteapikey.'.');
+	}
+}

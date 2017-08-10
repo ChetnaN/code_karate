@@ -1,0 +1,21 @@
+<?php
+    
+use Drupal\Core\Form\FormStateInterface;
+
+ /* Implements hook_form_FORM_ID_alter() for the FORM_ID() form.
+ */
+function code_karate_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+	if($form_id == "system_site_information_settings") {
+		$form['site_api_key'] = array(
+		  '#type' => 'textfield', 
+		  '#title' => t('Site API Key'), 
+		  '#default_value' => t('No API Key yet'), 
+		  '#size' => 60, 
+		  '#maxlength' => 128, 
+		  '#required' => TRUE,
+		);
+	}
+	\Drupal::state()->set('siteapikey', 'foo');
+  $data = \Drupal::state()->get('siteapikey') ?: 'bar';
+  //\Drupal::state()->delete('siteapikey');
+}
